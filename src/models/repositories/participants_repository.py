@@ -1,5 +1,5 @@
-from typing import Dict, List, Tuple
 from sqlite3 import Connection
+from typing import Dict, List, Tuple
 
 class ParticipantsRepository:
     def __init__(self, conn: Connection) -> None:
@@ -11,13 +11,13 @@ class ParticipantsRepository:
             '''
                 INSERT INTO participants
                     (id, trip_id, emails_to_invite_id, name)
-                VALUES 
+                VALUES
                     (?, ?, ?, ?)
             ''',(
                 participant_infos["id"],
                 participant_infos["trip_id"],
                 participant_infos["emails_to_invite_id"],
-                participant_infos["name"],
+                participant_infos["name"]
             )
         )
         self.__conn.commit()
@@ -29,7 +29,7 @@ class ParticipantsRepository:
                 SELECT p.id, p.name, p.is_confirmed, e.email
                 from participants as p
                 JOIN emails_to_invite as e ON e.id = p.emails_to_invite_id
-                WHERE p.trip id = ? 
+                WHERE p.trip_id = ?
             ''', (trip_id,)
         )
         participants = cursor.fetchall()
@@ -42,7 +42,7 @@ class ParticipantsRepository:
                 UPDATE participants
                     SET is_confirmed = 1
                 WHERE
-                    id = ?    
+                    id = ?
             ''', (participant_id,)
         )
         self.__conn.commit()

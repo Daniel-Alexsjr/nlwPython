@@ -5,7 +5,7 @@ class ActivitiesRepository:
     def __init__(self, conn: Connection) -> None:
         self.__conn = conn
 
-    def registry_activities(self, activity_infos: Dict) -> None:
+    def registry_activity(self, activity_infos: Dict) -> None:
         cursor = self.__conn.cursor()
         cursor.execute(
             '''
@@ -13,16 +13,15 @@ class ActivitiesRepository:
                     (id, trip_id, title, occurs_at)
                 VALUES
                     (?, ?, ?, ?)
-            ''',(
+            ''', (
                 activity_infos["id"],
                 activity_infos["trip_id"],
                 activity_infos["title"],
-                activity_infos["occurs_at"]
-
-
+                activity_infos["occurs_at"],
             )
         )
         self.__conn.commit()
+
     def find_activities_from_trip(self, trip_id: str) -> List[Tuple]:
         cursor = self.__conn.cursor()
         cursor.execute(
@@ -30,4 +29,3 @@ class ActivitiesRepository:
         )
         activities = cursor.fetchall()
         return activities
-    
